@@ -1,5 +1,6 @@
 
- #include <WiFi.h>
+#include <M5StickC.h>        // Use <M5StickCPlus.h> if you have Plus
+#include <WiFi.h>
 #include <WebServer.h>
 
 const char* ssid = "YOUR_WIFI_NAME";
@@ -8,24 +9,10 @@ const char* password = "YOUR_WIFI_PASSWORD";
 WebServer server(80);
 
 // Redirect to Rickroll
-void handleRoot() {
+void handleRedirect() {
   server.sendHeader("Location", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", true);
   server.send(302, "text/plain", "");
 }
 
 void setup() {
-  Serial.begin(115200);
-
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-  }
-
-  server.on("/", handleRoot);
-  server.begin();
-}
-
-void loop() {
-  server.handleClient();
-}
- 
+  M
