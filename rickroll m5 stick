@@ -1,0 +1,34 @@
+#include <WiFi.h>
+#include <WebServer.h>
+
+const char* ssid = "Free_WiFi";  // Name of the fake WiFi
+WebServer server(80);
+
+// Rickroll URL
+const char* rickrollURL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+
+void handleRoot() {
+  server.sendHeader("Location", rickrollURL, true);
+  server.send(302, "text/plain", "");
+}
+
+void setup() {
+  Serial.begin(115200);
+
+  // Start Access Point
+  WiFi.softAP(ssid);
+
+  // Redirect all requests
+  server.on("/", handleRoot);
+  server.onNotFound(handleRoot);
+
+  server.begin();
+
+  Serial.println("Rickroll AP started!");
+  Serial.print("AP IP address: ");
+  Serial.println(WiFi.softAPIP());
+}
+
+void loop() {
+  server.handleClient();
+}
