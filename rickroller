@@ -1,0 +1,6 @@
+REM Rickroll Payload for M5Stick (Bruce Firmware)
+DELAY 1000
+GUI R
+DELAY 500
+STRING www.youtube.com
+ENTER
