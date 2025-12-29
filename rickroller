@@ -1,6 +1,22 @@
-REM Rickroll Payload for M5Stick (Bruce Firmware)
-DELAY 1000
-GUI R
-DELAY 500
-STRING www.youtube.com
-ENTER
+#include <M5Stack.h> // Or appropriate M5Stack library
+
+const int START_RELAY_PIN = 26; // Example digital pin
+
+void setup() {
+  M5.begin();
+  pinMode(START_RELAY_PIN, OUTPUT);
+  digitalWrite(START_RELAY_PIN, LOW); // Ensure relay is off initially
+}
+
+void loop() {
+  // Wait for a signal (e.g., from a button press on the M5Stack)
+  if (M5.BtnA.wasPressed()) {
+    Serial.println("Start button pressed!");
+    digitalWrite(START_RELAY_PIN, HIGH); // Activate relay
+    delay(500); // Hold relay for 500ms (simulates pressing start)
+    digitalWrite(START_RELAY_PIN, LOW);  // Deactivate relay
+    Serial.println("Relay released.");
+  }
+  M5.update(); // Update M5Stack inputs
+}
+
