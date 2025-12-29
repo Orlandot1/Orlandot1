@@ -1,4 +1,3 @@
-
 #include <M5StickC.h>        // Use <M5StickCPlus.h> if you have Plus
 #include <WiFi.h>
 #include <WebServer.h>
@@ -15,4 +14,37 @@ void handleRedirect() {
 }
 
 void setup() {
-  M
+  M5.begin();
+  Serial.begin(115200);
+
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+
+  Serial.print("Connecting to WiFi");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("\nConnected!");
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+
+  // Redirect ALL requests
+  server.on("/", handleRedirect);
+  server.onNotFound(handleRedirect);
+  server.begin();
+
+  // Display info on screen
+  M5.Lcd.fillScreen(BLACK);
+  M5.Lcd.setTextColor(GREEN);
+  M5.Lcd.setCursor(0, 20);
+  M5.Lcd.println("Rickroll Server");
+  M5.Lcd.println("IP:");
+  M5.Lcd.println(WiFi.localIP());
+}
+
+void loop() {
+  server.handleClient();
+}
+
