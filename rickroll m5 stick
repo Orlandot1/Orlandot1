@@ -1,34 +1,35 @@
+#include <M5StickC.h>        // Use M5StickCPlus.h if you have Plus
 #include <WiFi.h>
 #include <WebServer.h>
 
-const char* ssid = "Free_WiFi";  // Name of the fake WiFi
+const char* ssid = "Free_WiFi";  // Fake WiFi name
+
 WebServer server(80);
 
 // Rickroll URL
 const char* rickrollURL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
 
-void handleRoot() {
+void handleRedirect() {
   server.sendHeader("Location", rickrollURL, true);
   server.send(302, "text/plain", "");
 }
 
 void setup() {
+  M5.begin();
   Serial.begin(115200);
 
-  // Start Access Point
+  WiFi.mode(WIFI_AP);
   WiFi.softAP(ssid);
 
-  // Redirect all requests
-  server.on("/", handleRoot);
-  server.onNotFound(handleRoot);
+  delay(100); // Important for stability
 
+  server.on("/", handleRedirect);
+  server.onNotFound(handleRedirect);
   server.begin();
 
   Serial.println("Rickroll AP started!");
   Serial.print("AP IP address: ");
   Serial.println(WiFi.softAPIP());
-}
 
-void loop() {
-  server.handleClient();
-}
+  // Display on screen
+
